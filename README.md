@@ -14,6 +14,7 @@
 ## Dependencies
 
 - SwiftUI
+- lipo (native on most Macs)
 
 ---
 
