@@ -14,7 +14,7 @@
 ## Dependencies
 
 - SwiftUI
-- lipo command (native on most Macs)
+- ```lipo``` command (native on most Macs)
 
 ---
 
