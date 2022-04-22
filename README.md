@@ -15,5 +15,7 @@
 
 - SwiftUI
 
+---
+
 <img width="889" alt="Screen Shot 2022-04-21 at 6 41 43 PM" src="https://user-images.githubusercontent.com/35755386/164589045-2a15674b-4c6f-471a-8c97-6383addab454.png">
 
