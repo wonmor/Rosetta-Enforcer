@@ -12,48 +12,22 @@ struct Choice: Identifiable {
     let name: String
 }
 
-final class ViewModel: ObservableObject {
-    init(choices: [Choice] = ViewModel.defaultChoices) {
-        self.choices = choices
-        self.selectedId = choices[0].id
-    }
-    @Published var choices: [Choice]
-    @Published var selectedId: String?
-    
-    // What is the question mark after the type: https://stackoverflow.com/questions/24009449/question-mark-after-data-type
-    
-    static let defaultChoices: [Choice] = ["Home", "Convert", "Settings"].map({ Choice(name: $0) })
-}
-
-// For the back button
-final class PreviousViewIndex: ObservableObject {
-    @Published var items = [Int]()
-    
-    func addNewIndex(newIndex: Int) {
-        guard items.count <= 10 else {
-            items.removeAll()
-            items.append(newIndex)
-            return
-        }
-        items += [newIndex]
-        
-        // Does not work properly for some reason; fix it!
-    }
-}
-
 // Unless using class-specific features, struct is the default go-to in Swift
 struct ContentView: View {
-    @State var isFooterHidden = true
     @State var stateOpacity = 1.0
     @State var currentSelection: String? = nil
+    
+    @State var isFooterHidden = true
     @State private var visible: Bool = false
     @State private var isStartUp: Bool = true
-    @State var filename = [String]()
+    
+    @State var filePath = [String]()
+    @State var fileName = [String]()
+    @State var fileArchitecture = [String?]()
     @State var previousUrlPath = [String]()
+    
     @State var tooManyFilesError = false
     @State var isNotAppError = false
-    
-    @ObservedObject var previousViewIndex = PreviousViewIndex()
     
     @AppStorage("showFooter") var showFooter: Bool = true
     @AppStorage("verboseMode") var verboseMode: Bool = true
@@ -62,6 +36,7 @@ struct ContentView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @StateObject var viewModel = ViewModel()
+    @StateObject var previousViewModel = PreviousViewModel()
     
     // This is the main view
     var body: some View {
@@ -79,7 +54,14 @@ struct ContentView: View {
                                     .padding()
                                     .onAppear() {
                                         guard isStartUp else {
-                                            self.previousViewIndex.addNewIndex(newIndex: 0)
+                                            self.previousViewModel.addNewIndex(newIndex: 0)
+                                            return
+                                        }
+                                        isStartUp = false
+                                    }
+                                    .onChange(of: item.name) { newValue in
+                                        guard isStartUp else {
+                                            self.previousViewModel.addNewIndex(newIndex: 0)
                                             return
                                         }
                                         isStartUp = false
@@ -92,7 +74,10 @@ struct ContentView: View {
                                 displayConvertElements()
                                     .padding()
                                     .onAppear() {
-                                        self.previousViewIndex.addNewIndex(newIndex: 1)
+                                        self.previousViewModel.addNewIndex(newIndex: 1)
+                                    }
+                                    .onChange(of: item.name) { newValue in
+                                        self.previousViewModel.addNewIndex(newIndex: 1)
                                     }
                                 
                             case "Settings":
@@ -102,7 +87,10 @@ struct ContentView: View {
                                 displaySettingsElements()
                                     .padding()
                                     .onAppear() {
-                                        self.previousViewIndex.addNewIndex(newIndex: 2)
+                                        self.previousViewModel.addNewIndex(newIndex: 2)
+                                    }
+                                    .onChange(of: item.name) { newValue in
+                                        self.previousViewModel.addNewIndex(newIndex: 2)
                                     }
                                 
                             default:
@@ -129,12 +117,12 @@ struct ContentView: View {
                     Button(action: toggleSidebar, label: { // 1
                         Image(systemName: "sidebar.leading")
                     })
-                    if previousViewIndex.items.count != 0 && previousViewIndex.items.count != 1 {
-                        Button(action: { viewModel.selectedId = viewModel.choices[previousViewIndex.items[previousViewIndex.items.count - 2]].id }) {
+                    if previousViewModel.items.count != 0 && previousViewModel.items.count != 1 {
+                        Button(action: { viewModel.selectedId = viewModel.choices[previousViewModel.items[previousViewModel.items.count - 2]].id }) {
                             Image(systemName: "chevron.left")
                         }
                     }
-                    else if previousViewIndex.items.count == 1 {
+                    else if previousViewModel.items.count == 1 {
                         Button(action: { viewModel.selectedId = viewModel.choices[0].id }) {
                             Image(systemName: "chevron.left")
                         }
@@ -240,6 +228,7 @@ struct ContentView: View {
                         }) {
                             HStack {
                                 Image(systemName: glyphDict[item.name] ?? "questionmark")
+                                
                                 Text("\(item.name)")
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
@@ -266,6 +255,8 @@ struct ContentView: View {
                     Button(action: {
                         let panel = NSOpenPanel()
                         
+                        var file: ConvertModel
+                        
                         panel.allowsMultipleSelection = true
                         panel.canChooseDirectories = false
                         
@@ -275,15 +266,23 @@ struct ContentView: View {
                             self.isNotAppError = false
                             
                             for url in panel.urls {
-                                if self.previousUrlPath.contains(url.path) == false && url.path.contains(".app") {
-                                    self.filename.append(url.path)
+                                if self.previousUrlPath.contains(url.path) == false && url.lastPathComponent.contains(".app") {
+                                    self.filePath.append(url.path)
+                                    
+                                    // self.fileName.append(url.lastPathComponent)
+                                    self.fileName.append(url.deletingPathExtension().lastPathComponent) // Filename without extension as it is obvious that it ends with .app
+                                    
+                                    file = ConvertModel(fileName: url.deletingPathExtension().lastPathComponent, filePath: url.path)
+                                    
+                                    self.fileArchitecture.append(file.getArchitecture() ?? nil)
                                 }
                                 else if url.path.contains(".app") {
                                     self.isNotAppError = true
                                 }
                                 self.previousUrlPath.append(url.path)
                             }
-                            print(self.filename)
+                            print(self.filePath)
+                            print(self.fileName)
                             
                             if panel.urls.count > 10 {
                                 self.tooManyFilesError = true
@@ -306,7 +305,7 @@ struct ContentView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                     
-                    if self.filename.count != 0 && self.tooManyFilesError == false {
+                    if self.filePath.count != 0 && self.tooManyFilesError == false {
                         Button(action: { print("button") }) {
                             HStack {
                                 Image(systemName: "play.rectangle.on.rectangle.fill")
@@ -323,7 +322,8 @@ struct ContentView: View {
                         .buttonStyle(PlainButtonStyle())
                         
                         Button(action: {
-                            self.filename.removeAll()
+                            self.filePath.removeAll()
+                            self.fileName.removeAll()
                             self.previousUrlPath.removeAll()
                         }) {
                             HStack {
@@ -344,9 +344,10 @@ struct ContentView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
                 VStack {
-                    if self.filename.count != 0 {
+                    if self.filePath.count != 0 {
                         HStack {
                             Image(systemName: self.tooManyFilesError ? "xmark.octagon.fill" : "checkmark.seal.fill")
+                            
                             Text(self.tooManyFilesError ? "Too many files selected; I am not a competitive eater (max. 10 files at once)" : "Selected files")
                                 .font(.title3)
                                 .fontWeight(.semibold)
@@ -356,13 +357,18 @@ struct ContentView: View {
                     
                     if self.tooManyFilesError == false {
                         ScrollView {
-                            ForEach(self.filename, id: \.self) { name in
-                                Text(name)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            ForEach(Array(zip(self.filePath.indices, self.filePath)), id: \.0) { index, name in
+                                LazyHStack(alignment: .center) {
+                                    Text(name)
+                                    
+                                    Text(self.fileArchitecture[index]!)
+                                        .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.red)
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
                             }
                             Spacer()
                         }
-                        .frame(maxHeight: 80)
+                        .frame(maxWidth: .infinity, maxHeight: 80)
                     }
                 }
                 .padding(.top)
@@ -375,12 +381,14 @@ struct ContentView: View {
             VStack {
                 HStack {
                     Image(systemName: "sparkles.tv.fill")
+                    
                     Text("User interface")
                         .font(.title3)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 Toggle("Verbose mode", isOn: $verboseMode)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                
                 Toggle("Show footer", isOn: $showFooter)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }

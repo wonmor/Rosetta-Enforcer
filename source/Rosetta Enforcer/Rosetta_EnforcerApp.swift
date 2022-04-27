@@ -8,7 +8,6 @@
 import SwiftUI
 
 @main
-// This is the main struct that instantiates when the application starts...
 struct Rosetta_EnforcerApp: App {
     var body: some Scene {
         WindowGroup {
