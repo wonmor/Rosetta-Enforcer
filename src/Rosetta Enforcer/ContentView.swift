@@ -36,6 +36,8 @@ final class PreviousViewIndex: ObservableObject {
             return
         }
         items += [newIndex]
+        
+        // Does not work properly for some reason; fix it!
     }
 }
 
@@ -47,8 +49,9 @@ struct ContentView: View {
     @State private var visible: Bool = false
     @State private var isStartUp: Bool = true
     @State var filename = [String]()
-    @State var showFileChooser = false
+    @State var previousUrlPath = [String]()
     @State var tooManyFilesError = false
+    @State var isNotAppError = false
     
     @ObservedObject var previousViewIndex = PreviousViewIndex()
     
@@ -185,7 +188,7 @@ struct ContentView: View {
             color2 = Color.purple
         }
         
-        return(
+        return (
             Text(text)
                 .font(.largeTitle)
                 .fontWeight(.bold)
@@ -223,7 +226,7 @@ struct ContentView: View {
             "Convert": "arrow.left.arrow.right",
             "Settings": "gearshape.fill"
         ]
-        return(
+        return (
             LazyHStack {
                 ForEach(viewModel.choices) { item in
                     if item.name != "Home" {
@@ -243,6 +246,7 @@ struct ContentView: View {
                             .padding(10.0)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
                             .frame(maxWidth: .infinity, alignment: .leading)
+                            .contentShape(Rectangle())
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10.0)
                                     .stroke(lineWidth: 2.0)
@@ -256,25 +260,35 @@ struct ContentView: View {
     }
     
     private func displayConvertElements() -> some View {
-        return(
+        return (
             VStack {
                 HStack {
                     Button(action: {
                         let panel = NSOpenPanel()
+                        
                         panel.allowsMultipleSelection = true
                         panel.canChooseDirectories = false
+                        
                         // If the user selects the files, get their paths and store them...
                         if panel.runModal() == .OK {
-                            tooManyFilesError = false
+                            self.tooManyFilesError = false
+                            self.isNotAppError = false
+                            
                             for url in panel.urls {
-                                self.filename.append(url.path)
-                                // Bug needs to be addressed: make a feature (button -> clear que) where you can clear up the array
+                                if self.previousUrlPath.contains(url.path) == false && url.path.contains(".app") {
+                                    self.filename.append(url.path)
+                                }
+                                else if url.path.contains(".app") {
+                                    self.isNotAppError = true
+                                }
+                                self.previousUrlPath.append(url.path)
                             }
                             print(self.filename)
                             
                             if panel.urls.count > 10 {
-                                tooManyFilesError = true
+                                self.tooManyFilesError = true
                             }
+                            // BUG: When files are added individually, tooManyFilesError condition doesn't get applied
                         }
                         
                     }) {
@@ -284,6 +298,7 @@ struct ContentView: View {
                         }
                         .padding(10.0)
                         .foregroundColor(colorScheme == .dark ? .white : .black)
+                        .contentShape(Rectangle())
                         .overlay(
                             RoundedRectangle(cornerRadius: 10.0)
                                 .stroke(lineWidth: 2.0)
@@ -291,7 +306,7 @@ struct ContentView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                     
-                    if self.filename.count != 0 && tooManyFilesError == false {
+                    if self.filename.count != 0 && self.tooManyFilesError == false {
                         Button(action: { print("button") }) {
                             HStack {
                                 Image(systemName: "play.rectangle.on.rectangle.fill")
@@ -299,6 +314,25 @@ struct ContentView: View {
                             }
                             .padding(10.0)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
+                            .contentShape(Rectangle())
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10.0)
+                                    .stroke(lineWidth: 2.0)
+                            )
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                        
+                        Button(action: {
+                            self.filename.removeAll()
+                            self.previousUrlPath.removeAll()
+                        }) {
+                            HStack {
+                                Image(systemName: "x.square.fill")
+                                Text("Clear queue")
+                            }
+                            .padding(10.0)
+                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                            .contentShape(Rectangle())
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10.0)
                                     .stroke(lineWidth: 2.0)
@@ -312,15 +346,15 @@ struct ContentView: View {
                 VStack {
                     if self.filename.count != 0 {
                         HStack {
-                            Image(systemName: tooManyFilesError ? "xmark.octagon.fill" : "checkmark.seal.fill")
-                            Text(tooManyFilesError ? "Too many files selected; I am not a competitive eater (max. 10 files at once)" : "Selected files")
+                            Image(systemName: self.tooManyFilesError ? "xmark.octagon.fill" : "checkmark.seal.fill")
+                            Text(self.tooManyFilesError ? "Too many files selected; I am not a competitive eater (max. 10 files at once)" : "Selected files")
                                 .font(.title3)
                                 .fontWeight(.semibold)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                     }
                     
-                    if tooManyFilesError == false {
+                    if self.tooManyFilesError == false {
                         ScrollView {
                             ForEach(self.filename, id: \.self) { name in
                                 Text(name)
