@@ -260,6 +260,12 @@ struct ContentView: View {
                         panel.allowsMultipleSelection = true
                         panel.canChooseDirectories = false
                         
+                        // When tooManyFilesError is trigged, on button click followed after, remove all previous file selections and disable the error (clearing up)
+                        if self.tooManyFilesError {
+                            removeAllFileSelections()
+                            self.tooManyFilesError = false
+                        }
+                        
                         // If the user selects the files, get their paths and store them...
                         if panel.runModal() == .OK {
                             self.tooManyFilesError = false
@@ -268,32 +274,30 @@ struct ContentView: View {
                             for url in panel.urls {
                                 if self.previousUrlPath.contains(url.path) == false && url.lastPathComponent.contains(".app") {
                                     self.filePath.append(url.path)
-                                    
+
                                     // self.fileName.append(url.lastPathComponent)
                                     self.fileName.append(url.deletingPathExtension().lastPathComponent) // Filename without extension as it is obvious that it ends with .app
                                     
                                     file = ConvertModel(fileName: url.deletingPathExtension().lastPathComponent, filePath: url.path)
                                     
                                     self.fileArchitecture.append(file.getArchitecture() ?? nil)
+                                    
+                                    // This line limits the max. file count to 10...
+                                    if self.filePath.count > 10 {
+                                        self.tooManyFilesError = true
+                                    }
                                 }
                                 else if url.path.contains(".app") {
                                     self.isNotAppError = true
                                 }
                                 self.previousUrlPath.append(url.path)
                             }
-                            print(self.filePath)
-                            print(self.fileName)
-                            
-                            if panel.urls.count > 10 {
-                                self.tooManyFilesError = true
-                            }
-                            // BUG: When files are added individually, tooManyFilesError condition doesn't get applied
                         }
                         
                     }) {
                         HStack {
-                            Image(systemName: "questionmark.folder.fill")
-                            Text("Select files")
+                            Image(systemName: self.tooManyFilesError ? "x.square.fill" : "questionmark.folder.fill")
+                            Text(self.tooManyFilesError ? "Clear queue and reselect files" : "Select files")
                         }
                         .padding(10.0)
                         .foregroundColor(colorScheme == .dark ? .white : .black)
@@ -322,9 +326,7 @@ struct ContentView: View {
                         .buttonStyle(PlainButtonStyle())
                         
                         Button(action: {
-                            self.filePath.removeAll()
-                            self.fileName.removeAll()
-                            self.previousUrlPath.removeAll()
+                            removeAllFileSelections()
                         }) {
                             HStack {
                                 Image(systemName: "x.square.fill")
@@ -393,6 +395,12 @@ struct ContentView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         )
+    }
+    
+    private func removeAllFileSelections() {
+        self.filePath.removeAll()
+        self.fileName.removeAll()
+        self.previousUrlPath.removeAll()
     }
 }
 
