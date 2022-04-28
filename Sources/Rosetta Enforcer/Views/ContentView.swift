@@ -17,7 +17,8 @@ struct ContentView: View {
     @State var stateOpacity = 1.0
     @State var currentSelection: String? = nil
     
-    @State var isFooterHidden = true
+    @State public var isConvertOptions = false
+    
     @State private var visible: Bool = false
     @State private var isStartUp: Bool = true
     
@@ -28,6 +29,7 @@ struct ContentView: View {
     
     @State var tooManyFilesError = false
     @State var isNotAppError = false
+    @State var isFooterHidden = true
     
     @AppStorage("showFooter") var showFooter: Bool = true
     @AppStorage("verboseMode") var verboseMode: Bool = true
@@ -137,18 +139,18 @@ struct ContentView: View {
                 Text(self.currentSelection!)
                     .opacity(self.visible ? 1 : 0)
                     .opacity(stateOpacity)
+                    .padding(.bottom, 8)
                     .onAppear() {
                         footerFadeOut()
                     }
                     .onChange(of: self.currentSelection) { newValue in
                         footerFadeOut()
                     }
-                Spacer()
             }
             else {
                 Text("Developed and Designed by John Seong. All Rights Reserved.")
                     .foregroundColor(.gray)
-                Spacer()
+                    .padding(.bottom, 8)
             }
         }
     }
@@ -274,7 +276,7 @@ struct ContentView: View {
                             for url in panel.urls {
                                 if self.previousUrlPath.contains(url.path) == false && url.lastPathComponent.contains(".app") {
                                     self.filePath.append(url.path)
-
+                                    
                                     // self.fileName.append(url.lastPathComponent)
                                     self.fileName.append(url.deletingPathExtension().lastPathComponent) // Filename without extension as it is obvious that it ends with .app
                                     
@@ -310,7 +312,8 @@ struct ContentView: View {
                     .buttonStyle(PlainButtonStyle())
                     
                     if self.filePath.count != 0 && self.tooManyFilesError == false {
-                        Button(action: { print("button") }) {
+                        Button(action: { self.isConvertOptions = true }
+                        ) {
                             HStack {
                                 Image(systemName: "play.rectangle.on.rectangle.fill")
                                 Text("Start converting")
@@ -324,6 +327,9 @@ struct ContentView: View {
                             )
                         }
                         .buttonStyle(PlainButtonStyle())
+                        .sheet(isPresented: $isConvertOptions, content: {
+                            AppConvertView(isConvertOptions: $isConvertOptions, filePath: $filePath, fileArchitecture: $fileArchitecture)
+                        })
                         
                         Button(action: {
                             removeAllFileSelections()
@@ -361,7 +367,7 @@ struct ContentView: View {
                         ScrollView {
                             ForEach(Array(zip(self.filePath.indices, self.filePath)), id: \.0) { index, name in
                                 LazyHStack(alignment: .center) {
-                                    Text(name)
+                                    Text("\(index + 1). \(name)")
                                     
                                     Text(self.fileArchitecture[index]!)
                                         .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.red)
@@ -404,8 +410,9 @@ struct ContentView: View {
     }
 }
 
-// For Xcode Preview...
 struct ContentView_Previews: PreviewProvider {
+    @State static var isConvertOptions = true
+    
     static var previews: some View {
         ContentView()
     }

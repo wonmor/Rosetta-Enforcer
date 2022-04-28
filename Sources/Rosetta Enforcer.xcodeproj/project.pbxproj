@@ -14,6 +14,7 @@
 		965992A627FF5951005AFFFB /* Rosetta_EnforcerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965992A527FF5951005AFFFB /* Rosetta_EnforcerTests.swift */; };
 		965992B027FF5951005AFFFB /* Rosetta_EnforcerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965992AF27FF5951005AFFFB /* Rosetta_EnforcerUITests.swift */; };
 		965992B227FF5951005AFFFB /* Rosetta_EnforcerUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 965992B127FF5951005AFFFB /* Rosetta_EnforcerUITestsLaunchTests.swift */; };
+		9669CFE8281B12C900631778 /* AppConvertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9669CFE7281B12C900631778 /* AppConvertView.swift */; };
 		9673DB272818E60C00CCA852 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9673DB262818E60C00CCA852 /* Models.swift */; };
 /* End PBXBuildFile section */
 
@@ -46,6 +47,7 @@
 		965992AB27FF5951005AFFFB /* Rosetta EnforcerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Rosetta EnforcerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		965992AF27FF5951005AFFFB /* Rosetta_EnforcerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rosetta_EnforcerUITests.swift; sourceTree = "<group>"; };
 		965992B127FF5951005AFFFB /* Rosetta_EnforcerUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rosetta_EnforcerUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		9669CFE7281B12C900631778 /* AppConvertView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConvertView.swift; sourceTree = "<group>"; };
 		9673DB262818E60C00CCA852 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,7 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				9659929327FF594F005AFFFB /* Rosetta_EnforcerApp.swift */,
-				9659929527FF594F005AFFFB /* ContentView.swift */,
+				9669CFE9281B3E7600631778 /* Views */,
 				9673DB262818E60C00CCA852 /* Models.swift */,
 				9659929727FF5951005AFFFB /* Assets.xcassets */,
 				9659929C27FF5951005AFFFB /* Rosetta_Enforcer.entitlements */,
@@ -130,6 +132,15 @@
 				965992B127FF5951005AFFFB /* Rosetta_EnforcerUITestsLaunchTests.swift */,
 			);
 			path = "Rosetta EnforcerUITests";
+			sourceTree = "<group>";
+		};
+		9669CFE9281B3E7600631778 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				9669CFE7281B12C900631778 /* AppConvertView.swift */,
+				9659929527FF594F005AFFFB /* ContentView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -262,6 +273,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9669CFE8281B12C900631778 /* AppConvertView.swift in Sources */,
 				9659929627FF594F005AFFFB /* ContentView.swift in Sources */,
 				9673DB272818E60C00CCA852 /* Models.swift in Sources */,
 				9659929427FF594F005AFFFB /* Rosetta_EnforcerApp.swift in Sources */,
