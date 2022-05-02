@@ -328,7 +328,7 @@ struct ContentView: View {
                         }
                         .buttonStyle(PlainButtonStyle())
                         .sheet(isPresented: $isConvertOptions, content: {
-                            AppConvertView(isConvertOptions: $isConvertOptions, filePath: $filePath, fileArchitecture: $fileArchitecture)
+                            AppConvertView(isConvertOptions: $isConvertOptions, fileName: $fileName, filePath: $filePath, fileArchitecture: $fileArchitecture)
                         })
                         
                         Button(action: {
@@ -370,7 +370,7 @@ struct ContentView: View {
                                     Text("\(index + 1). \(name)")
                                     
                                     Text(self.fileArchitecture[index]!)
-                                        .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.red)
+                                        .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.pink)
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
@@ -399,6 +399,30 @@ struct ContentView: View {
                 
                 Toggle("Show footer", isOn: $showFooter)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.bottom)
+                
+                VStack {
+                    Text("Licensed under BSD-2-Clause")
+                        .font(.title)
+                        .fontWeight(.thin)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    
+                    HStack {
+                        Link("Source Code", destination: URL(string: "https://github.com/wonmor/Rosetta-Enforcer")!)
+                            .font(.title3)
+                        
+                        Text(" | ")
+                        
+                        Link("Developer's Website", destination: URL(string: "https://johnseong.info")!)
+                            .font(.title3)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10.0)
+                        .stroke(lineWidth: 2.0)
+                )
             }
         )
     }

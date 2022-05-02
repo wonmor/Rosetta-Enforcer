@@ -88,6 +88,10 @@ final class ConvertModel: ObservableObject {
         }
     }
     
+    func universalToIntel() {
+        return
+    }
+    
     static func safeShell(_ command: String) throws -> String {
         let task = Process()
         let pipe = Pipe()

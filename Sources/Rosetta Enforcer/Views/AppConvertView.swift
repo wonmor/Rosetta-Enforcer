@@ -9,11 +9,16 @@ import SwiftUI
 
 struct AppConvertView: View {
     @Binding var isConvertOptions: Bool
+    @Binding var fileName: [String]
     @Binding var filePath: [String]
     @Binding var fileArchitecture: [String?]
     
-    init(isConvertOptions: Binding<Bool>, filePath: Binding<[String]>, fileArchitecture: Binding<[String?]>) {
+    // Detect whether OS is on dark mode or light mode
+    @Environment(\.colorScheme) var colorScheme
+    
+    init(isConvertOptions: Binding<Bool>, fileName: Binding<[String]>, filePath: Binding<[String]>, fileArchitecture: Binding<[String?]>) {
         self._isConvertOptions = isConvertOptions
+        self._fileName = fileName
         self._filePath = filePath
         self._fileArchitecture = fileArchitecture
     }
@@ -34,17 +39,50 @@ struct AppConvertView: View {
                 )
             }
             
-            Text("Convert Options")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+            HStack {
+                Text("Convert")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color.gray)
+                
+                Text("Options")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+            }
             
             ScrollView {
                 ForEach(Array(zip(self.filePath.indices, self.filePath)), id: \.0) { index, name in
                     LazyHStack(alignment: .center) {
                         Text("\(index + 1). \(name)")
                         
+                        Text(" | ")
+                    
                         Text(self.fileArchitecture[index]!)
-                            .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.red)
+                            .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.pink)
+                        
+                        if self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") {
+                            Text(" | ")
+                            
+                            Button(action: {
+                                // Write more code here...
+                            } ) {
+                                HStack {
+                                    Text("Convert to ARM")
+                                }
+                            }
+                            .buttonStyle(LinkButtonStyle())
+                            
+                            Text(" | ")
+                            
+                            Button(action: {
+                                // Write more code here...
+                            } ) {
+                                HStack {
+                                    Text("Convert to Intel")
+                                }
+                            }
+                            .buttonStyle(LinkButtonStyle())
+                        }
                     }
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -53,7 +91,6 @@ struct AppConvertView: View {
         .padding()
         .buttonStyle(PlainButtonStyle())
         .frame(width: 650, alignment: .leading)
-        
     }
 }
 
