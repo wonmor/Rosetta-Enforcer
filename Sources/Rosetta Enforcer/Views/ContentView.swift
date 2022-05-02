@@ -368,6 +368,7 @@ struct ContentView: View {
                             ForEach(Array(zip(self.filePath.indices, self.filePath)), id: \.0) { index, name in
                                 LazyHStack(alignment: .center) {
                                     Text("\(index + 1). \(name)")
+                                        .foregroundColor(Color.gray)
                                     
                                     Text(self.fileArchitecture[index]!)
                                         .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.pink)

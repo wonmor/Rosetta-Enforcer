@@ -54,6 +54,7 @@ struct AppConvertView: View {
                 ForEach(Array(zip(self.filePath.indices, self.filePath)), id: \.0) { index, name in
                     LazyHStack(alignment: .center) {
                         Text("\(index + 1). \(name)")
+                            .foregroundColor(Color.gray)
                         
                         Text(" | ")
                     
