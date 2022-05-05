@@ -282,7 +282,7 @@ struct ContentView: View {
                                     
                                     file = ConvertModel(fileName: url.deletingPathExtension().lastPathComponent, filePath: url.path)
                                     
-                                    self.fileArchitecture.append(file.getArchitecture() ?? nil)
+                                    self.fileArchitecture.append(file.runLipoCommand(commandState: .CheckArchitecture) ?? nil)
                                     
                                     // This line limits the max. file count to 10...
                                     if self.filePath.count > 10 {
@@ -431,6 +431,7 @@ struct ContentView: View {
     private func removeAllFileSelections() {
         self.filePath.removeAll()
         self.fileName.removeAll()
+        self.fileArchitecture.removeAll()
         self.previousUrlPath.removeAll()
     }
 }

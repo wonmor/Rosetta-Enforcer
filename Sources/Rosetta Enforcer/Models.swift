@@ -8,6 +8,10 @@
 
 import Foundation
 
+enum LipoCommands {
+    case CheckArchitecture, UniversalToArm, UniversalToIntel
+}
+
 final class ViewModel: ObservableObject {
     init(choices: [Choice] = ViewModel.defaultChoices) {
         self.choices = choices
@@ -51,9 +55,35 @@ final class ConvertModel: ObservableObject {
     
     @Published var isConvertError: Bool
     
-    func getArchitecture() -> String? {
+    func runLipoCommand(commandState: LipoCommands) -> String? {
+        var commandToRun: String
+        var addExtraRemark: Bool
+        
+        switch commandState {
+        case .CheckArchitecture:
+            commandToRun = "lipo -archs"
+            addExtraRemark = false
+        case .UniversalToArm:
+            commandToRun = "lipo -remove arm64"
+            addExtraRemark = true
+        case .UniversalToIntel:
+            commandToRun = "lipo -remove x86_64"
+            addExtraRemark = true
+        }
+        
         do {
-            let returnValue = try ConvertModel.safeShell("lipo -archs \(self.filePath)/Contents/MacOS/\(self.fileName)")
+            var returnValue: String
+            
+            if !addExtraRemark {
+                returnValue = try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(self.fileName)")
+                
+                print("----------")
+                print("\(self.fileName): \(returnValue)")
+            }
+            
+            else {
+                returnValue = try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(self.fileName) -output \(self.filePath)/Contents/MacOS/\(self.fileName)" )
+            }
             
             // If the .exec file name is different from the .app name...
             if returnValue.contains("FATAL ERROR") {
@@ -64,11 +94,19 @@ final class ConvertModel: ObservableObject {
                 // Remove ./ and both leading & ending whitespaces
                 revisedFileName = revisedFileName.replacing(target: "./", withString: "").trimmingCharacters(in: .whitespacesAndNewlines)
                 
-                print(revisedFileName)
+                print("Revised file name: \(revisedFileName)")
                 
-                return try ConvertModel.safeShell("lipo -archs \(self.filePath)/Contents/MacOS/\(revisedFileName)").trimmingCharacters(in: .whitespacesAndNewlines)
+                if !addExtraRemark {
+                    return try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(revisedFileName)").trimmingCharacters(in: .whitespacesAndNewlines)
+                }
+                
+                else {
+                    return try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(revisedFileName) -output \(self.filePath)/Contents/MacOS/\(revisedFileName)").trimmingCharacters(in: .whitespacesAndNewlines)
+                }
             }
             else {
+                print("Reformatted returnValue: \(returnValue.trimmingCharacters(in: .whitespacesAndNewlines))")
+                
                 return returnValue.trimmingCharacters(in: .whitespacesAndNewlines)
             }
         }
@@ -76,20 +114,6 @@ final class ConvertModel: ObservableObject {
             isConvertError = true
             return nil
         }
-    }
-    
-    func universalToARM() -> String? {
-        do {
-            return try ConvertModel.safeShell("lipo -remove arm64 \(self.filePath)/Contents/MacOS/\(self.fileName) -output \(self.filePath)/Contents/MacOS/\(self.fileName)")
-        }
-        catch {
-            isConvertError = true
-            return nil
-        }
-    }
-    
-    func universalToIntel() {
-        return
     }
     
     static func safeShell(_ command: String) throws -> String {
