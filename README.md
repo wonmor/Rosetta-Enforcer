@@ -1,5 +1,6 @@
 # Rosetta Enforcer
-**Rosetta Enforcer** is a macOS utility designed to help developers convert **Universal Binary** application to **Single Architecture**, vice versa.
+**Rosetta Enforcer** is a macOS utility designed to help developers convert **Universal Binary** application to **Single Architecture**.
+*e.g. Intel-only, forcing Rosetta to run on M1 (ARM) Macs*
 
 ---
 
