@@ -64,10 +64,10 @@ final class ConvertModel: ObservableObject {
             commandToRun = "lipo -archs"
             addExtraRemark = false
         case .UniversalToArm:
-            commandToRun = "lipo -remove arm64"
+            commandToRun = "lipo -remove x86_64"
             addExtraRemark = true
         case .UniversalToIntel:
-            commandToRun = "lipo -remove x86_64"
+            commandToRun = "lipo -remove arm64"
             addExtraRemark = true
         }
         
@@ -106,6 +106,8 @@ final class ConvertModel: ObservableObject {
             }
             else {
                 print("Reformatted returnValue: \(returnValue.trimmingCharacters(in: .whitespacesAndNewlines))")
+                
+                print(returnValue)
                 
                 return returnValue.trimmingCharacters(in: .whitespacesAndNewlines)
             }

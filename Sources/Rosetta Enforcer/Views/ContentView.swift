@@ -217,35 +217,73 @@ struct ContentView: View {
             "Settings": "gearshape.fill"
         ]
         return (
-            LazyHStack {
-                ForEach(viewModel.choices) { item in
-                    if item.name != "Home" {
-                        Button(action: {
-                            if item.name == "Convert" {
-                                viewModel.selectedId = viewModel.choices[1].id
+            LazyVStack {
+                LazyHStack {
+                    ForEach(viewModel.choices) { item in
+                        if item.name != "Home" {
+                            Button(action: {
+                                if item.name == "Convert" {
+                                    viewModel.selectedId = viewModel.choices[1].id
+                                }
+                                else if item.name == "Settings" {
+                                    viewModel.selectedId = viewModel.choices[2].id
+                                }
+                            }) {
+                                HStack {
+                                    Image(systemName: glyphDict[item.name] ?? "questionmark")
+                                    
+                                    Text("\(item.name)")
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .padding(10.0)
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
+                                .contentShape(Rectangle())
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 10.0)
+                                        .stroke(lineWidth: 2.0)
+                                )
                             }
-                            else if item.name == "Settings" {
-                                viewModel.selectedId = viewModel.choices[2].id
-                            }
-                        }) {
-                            HStack {
-                                Image(systemName: glyphDict[item.name] ?? "questionmark")
-                                
-                                Text("\(item.name)")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                            .padding(10.0)
-                            .foregroundColor(colorScheme == .dark ? .white : .black)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .contentShape(Rectangle())
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10.0)
-                                    .stroke(lineWidth: 2.0)
-                            )
+                            .buttonStyle(PlainButtonStyle())
                         }
-                        .buttonStyle(PlainButtonStyle())
                     }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                // TEMPORARY ADDITION TO THE CODE - START
+                
+                ZStack {
+                    if colorScheme == .dark {
+                        Color(white: 255)
+                    }
+                    else {
+                        Color(red: 0, green: 0, blue: 0)
+                    }
+                    
+                    VStack {
+                        Text("Currently in the development phase")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                            .foregroundColor(colorScheme == .dark ? .black : .white)
+                            .padding(.top)
+                            .padding(.bottom, 5)
+                            .padding(.leading)
+                            .padding(.trailing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                        Text("Please note that some of the features might not work as intended. The Universal to Single Architecture conversion, in particular: if you have already clicked either the \"Convert to ARM\" or \"Convert to Intel\" button, assume that the conversion process is done although no alert message shows up following by. ")
+                            .font(.title3)
+                            .fontWeight(.light)
+                            .foregroundColor(colorScheme == .dark ? .black : .white)
+                            .padding(.leading)
+                            .padding(.trailing)
+                            .padding(.bottom)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                }
+                .padding()
+                
+                // TEMPORARY ADDITION TO THE CODE - END
+                
             }
         )
     }
@@ -265,7 +303,9 @@ struct ContentView: View {
                         // When tooManyFilesError is trigged, on button click followed after, remove all previous file selections and disable the error (clearing up)
                         if self.tooManyFilesError {
                             removeAllFileSelections()
+                            
                             self.tooManyFilesError = false
+                            self.isNotAppError = false
                         }
                         
                         // If the user selects the files, get their paths and store them...
@@ -428,7 +468,7 @@ struct ContentView: View {
         )
     }
     
-    private func removeAllFileSelections() {
+    func removeAllFileSelections() {
         self.filePath.removeAll()
         self.fileName.removeAll()
         self.fileArchitecture.removeAll()
