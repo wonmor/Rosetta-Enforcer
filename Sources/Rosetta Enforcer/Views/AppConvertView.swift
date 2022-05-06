@@ -14,6 +14,7 @@ struct AppConvertView: View {
     @State var convertingCompleted = Array<Bool>(repeating: false, count: 30)
     
     @State var previousIndex: Int = 0
+    @State var requestTimeOut: Bool = false
     
     @Binding var isConvertOptions: Bool
     @Binding var fileName: [String]
@@ -63,7 +64,10 @@ struct AppConvertView: View {
                         Text("\(index + 1). \(name)")
                             .foregroundColor(Color.gray)
                         
+                        // Remove this section?
                         if !self.convertingInProgress[index] && !self.convertingCompleted[index] {
+                            Text(" | ")
+                            
                             displayArchitecture(index: index)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .onAppear() {
@@ -71,61 +75,65 @@ struct AppConvertView: View {
                                 }
                         }
                         
-                        if self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") {
-                            Text(" | ")
-                                .onAppear() {
-                                    self.fileReturnValues[index] = ""
-                                }
-                            
-                            Button(action: {
-                                startConversion(fileName: name, filePath: self.filePath[index], index: index, commandState: .UniversalToArm)
-                            } ) {
-                                HStack {
-                                    Text("Convert to ARM")
-                                }
-                            }
-                            .buttonStyle(LinkButtonStyle())
-                            
-                            Text(" | ")
-                                .onAppear() {
-                                    // Make the array's size dynamic...
-                                    let currentIndex = (index + 1) % 30
-                                    
-                                    if currentIndex == 0 && self.previousIndex != currentIndex {
-                                        self.fileReturnValues.append(contentsOf: repeatElement("", count: 30))
-                                        self.convertingInProgress.append(contentsOf: repeatElement(false, count: 30))
-                                        self.convertingCompleted.append(contentsOf: repeatElement(false, count: 30))
-                                        
-                                        self.previousIndex = currentIndex
+                        if !self.convertingInProgress[index] && !self.convertingCompleted[index] {
+                            if self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") {
+                                Text(" | ")
+                                    .onAppear() {
+                                        self.fileReturnValues[index] = ""
                                     }
-                                    self.fileReturnValues[index] = ""
+                                
+                                Button(action: {
+                                    startConversion(fileName: name, filePath: self.filePath[index], index: index, commandState: .UniversalToArm)
+                                } ) {
+                                    HStack {
+                                        Text("Convert to ARM")
+                                    }
                                 }
-                            
-                            Button(action: {
-                                startConversion(fileName: name, filePath: self.filePath[index], index: index, commandState: .UniversalToIntel)
-                            } ) {
-                                HStack {
-                                    Text("Convert to Intel")
+                                .buttonStyle(LinkButtonStyle())
+                                
+                                Text(" | ")
+                                    .onAppear() {
+                                        // Make the array's size dynamic...
+                                        let currentIndex = (index + 1) % 30
+                                        
+                                        if currentIndex == 0 && self.previousIndex != currentIndex {
+                                            self.fileReturnValues.append(contentsOf: repeatElement("", count: 30))
+                                            self.convertingInProgress.append(contentsOf: repeatElement(false, count: 30))
+                                            self.convertingCompleted.append(contentsOf: repeatElement(false, count: 30))
+                                            
+                                            self.previousIndex = currentIndex
+                                        }
+                                        self.fileReturnValues[index] = ""
+                                    }
+                                
+                                Button(action: {
+                                    startConversion(fileName: name, filePath: self.filePath[index], index: index, commandState: .UniversalToIntel)
+                                } ) {
+                                    HStack {
+                                        Text("Convert to Intel")
+                                    }
                                 }
+                                .buttonStyle(LinkButtonStyle())
                             }
-                            .buttonStyle(LinkButtonStyle())
                         }
                         
                         if self.convertingInProgress[index] {
+                            Text(" | ")
+                            
                             Text("Converting in progress...")
                         }
                         
+                        // Update the architecture label when the converting process is completed...
                         if self.convertingCompleted[index] {
-                            displayArchitecture(index: index)
-                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Text(" | ")
                                 .onAppear() {
-                                    print("Running displayArchitecture method...")
+                                    let file = ConvertModel(fileName: name, filePath: self.filePath[index])
+                                    self.fileArchitecture[index] = file.runLipoCommand(commandState: .CheckArchitecture) ?? ""
                                 }
                             
-                            if !self.fileReturnValues[index].isEmpty {
-                                Text(" | ")
-                                
-                                Text(self.fileReturnValues[index])
+                            if !(self.fileArchitecture[index]?.isEmpty ?? false) {
+                                Text(self.fileArchitecture[index]!)
+                                    .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.pink)
                             }
                         }
                     }
@@ -141,8 +149,6 @@ struct AppConvertView: View {
     private func displayArchitecture(index: Int) -> some View {
         return (
             HStack {
-                Text(" | ")
-            
                 Text(self.fileArchitecture[index]!)
                     .foregroundColor(self.fileArchitecture[index]!.contains("x86_64") && self.fileArchitecture[index]!.contains("arm64") ? Color.green : Color.pink)
             }
@@ -162,7 +168,25 @@ struct AppConvertView: View {
         
         // Implemented the recently released Swift Concurrency...
         Task {
-            self.fileReturnValues[index] = await conversionHelper.universalToSingle(fileName: fileName, filePath: filePath, index: index, commandState: commandState)!
+            let startTime = DispatchTime.now()
+            
+            // Wait until the conversion process is finished up to 20 seconds... (Models returns a non-nil value)
+            while self.fileReturnValues[index].isEmpty || self.fileReturnValues[index].contains("Fatal Error") {
+                self.fileReturnValues[index] = await conversionHelper.universalToSingle(fileName: fileName, filePath: filePath, index: index, commandState: commandState) ?? ""
+                
+                let thisTime = DispatchTime.now()
+                let deltaNanoSeconds = thisTime.uptimeNanoseconds - startTime.uptimeNanoseconds
+                let deltaTime = Double(deltaNanoSeconds) / 1_000_000_000 // deltaTime in seconds
+                
+                // If the time elapsed is longer than 3 seconds...
+                if deltaTime >= 3.0 {
+                    self.requestTimeOut = true
+                    break
+                }
+                // The above part of code has to be more optimized...
+            }
+            print("Within async task - self.fileReturnValue: \(self.fileReturnValues[index])")
+            
             Task { @MainActor in
                 self.convertingCompleted[index] = true
                 self.convertingInProgress[index] = false
@@ -179,7 +203,7 @@ struct AppConvertView: View {
         
         let file = ConvertModel(fileName: fileName, filePath: filePath)
         
-        self.fileArchitecture[index] = file.runLipoCommand(commandState: .CheckArchitecture) ?? nil
+        self.fileArchitecture[index] = file.runLipoCommand(commandState: .CheckArchitecture) ?? ""
     }
 }
 

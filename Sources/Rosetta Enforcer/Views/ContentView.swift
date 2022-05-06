@@ -32,7 +32,7 @@ struct ContentView: View {
     @State var isFooterHidden = true
     
     @AppStorage("showFooter") var showFooter: Bool = true
-    @AppStorage("verboseMode") var verboseMode: Bool = true
+    @AppStorage("verboseMode") var verboseMode: Bool = false
     
     // Detect whether OS is on dark mode or light mode
     @Environment(\.colorScheme) var colorScheme
@@ -260,9 +260,9 @@ struct ContentView: View {
                     }
                     
                     VStack {
-                        Text("Currently in the development phase")
+                        Text("Official Release 1.0")
                             .font(.title)
-                            .fontWeight(.semibold)
+                            .fontWeight(.regular)
                             .foregroundColor(colorScheme == .dark ? .black : .white)
                             .padding(.top)
                             .padding(.bottom, 5)
@@ -270,13 +270,19 @@ struct ContentView: View {
                             .padding(.trailing)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             
-                        Text("Please note that some of the features might not work as intended. The Universal to Single Architecture conversion, in particular: if you have already clicked either the \"Convert to ARM\" or \"Convert to Intel\" button, assume that the conversion process is done although no alert message shows up following by. ")
+                        Text("Some of the features does not work as intended; if so, please report the bug on the GitHub page!")
                             .font(.title3)
                             .fontWeight(.light)
                             .foregroundColor(colorScheme == .dark ? .black : .white)
                             .padding(.leading)
                             .padding(.trailing)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Link("Report a bug", destination: URL(string: "https://github.com/wonmor/Rosetta-Enforcer/issues")!)
+                            .font(.title3)
+                            .foregroundColor(colorScheme == .dark ? .blue : Color(red: 0.4627, green: 0.8392, blue: 1.0))
                             .padding(.bottom)
+                            .padding(.leading)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
@@ -437,6 +443,7 @@ struct ContentView: View {
                 }
                 Toggle("Verbose mode", isOn: $verboseMode)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .disabled(true)
                 
                 Toggle("Show footer", isOn: $showFooter)
                     .frame(maxWidth: .infinity, alignment: .leading)

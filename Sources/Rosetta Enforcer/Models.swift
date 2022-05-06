@@ -86,7 +86,7 @@ final class ConvertModel: ObservableObject {
             }
             
             // If the .exec file name is different from the .app name...
-            if returnValue.contains("FATAL ERROR") {
+            if returnValue.contains("Fatal Error") {
                 print("Exception running...")
                 
                 var revisedFileName = try ConvertModel.safeShell("cd \(self.filePath)/Contents/MacOS && find . -mindepth 1 -print -quit")
@@ -97,11 +97,13 @@ final class ConvertModel: ObservableObject {
                 print("Revised file name: \(revisedFileName)")
                 
                 if !addExtraRemark {
-                    return try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(revisedFileName)").trimmingCharacters(in: .whitespacesAndNewlines)
+                    returnValue = try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(revisedFileName)")
+                    return returnValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 }
                 
                 else {
-                    return try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(revisedFileName) -output \(self.filePath)/Contents/MacOS/\(revisedFileName)").trimmingCharacters(in: .whitespacesAndNewlines)
+                    returnValue = try ConvertModel.safeShell("\(commandToRun) \(self.filePath)/Contents/MacOS/\(revisedFileName) -output \(self.filePath)/Contents/MacOS/\(revisedFileName)")
+                    return returnValue.trimmingCharacters(in: .whitespacesAndNewlines)
                 }
             }
             else {
@@ -132,7 +134,7 @@ final class ConvertModel: ObservableObject {
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
         let output = String(data: data, encoding: .utf8)!
         
-        return output.contains("error") ? "FATAL ERROR: .EXEC FILE NOT FOUND" : output
+        return output.contains("error") ? "Fatal Error: .EXEC File Not Found" : output
     }
 }
 
