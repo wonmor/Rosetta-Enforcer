@@ -7,7 +7,12 @@
 
 1. **Universal Binary** to **Intel-only**
 2. **Universal Binary** to **ARM-only**
-3. **Intel-only** and **ARM-only** to **Universal Binary**
+
+---
+
+## Official Release 1.0
+
+The **download link** will be available soon.
 
 ---
 
