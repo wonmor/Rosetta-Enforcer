@@ -24,5 +24,5 @@ The **download link** will be available soon.
 
 ## Dependencies
 
-- SwiftUI
-- ```lipo``` command (native on most Macs)
+- **SwiftUI**: User Interface Toolkit
+- ```lipo``` command (**native** on most Macs)
