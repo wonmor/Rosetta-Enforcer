@@ -47,3 +47,7 @@ I made a game that uses PyGame, and when I try to compile it using PyInstaller t
 
 - **SwiftUI**: User Interface Toolkit
 - ```lipo``` command (**native** on most Macs)
+
+---
+
+Please note that the app is **not sandboxed** due to it nature of modifying other apps in the ```Application``` folder.
