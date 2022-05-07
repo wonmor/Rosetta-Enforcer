@@ -9,7 +9,18 @@
 
 ## Official Release 1.0
 
+Developed and Designed by John Seong. Served under the BSD-2-Clause License.
+
 [Download for **macOS**](https://github.com/wonmor/Rosetta-Enforcer/raw/main/Installers/Install_Rosetta_Enforcer.dmg)
+
+---
+
+## Frequently Asked Questions
+
+You might ask: **What is the possible use case for it? Why would anyone prefer Rosetta instead of running the app natiely on ARM macs?**
+
+
+Answer: I made a game that uses PyGame, and when I try to compile it using PyInstaller to .app file, it automatically generates a Universal Binary app without giving developers a choice to select either Intel or ARM. Just as a side note, PyGame library does not support ARM macs yet, so if I run it normally without turning on the “Open using Rosetta” option in the default macOS “Show properties” menu when you right-click the app, it literally crashes immediately upon launch. When distributing an app that is NOT compiled using Xcode directly to users, I can’t just write in big red letters to go to properties and turn on the ‘Open using Rosetta’ option all the time; that’s too much work for users in most of the cases, and if they skip that stage ARM mac users will think the app simply crashes every time after launch. Using Rosetta Enforcer, developers can permanently remove one of the so-called “mis-compiled” binaries without going through a hassle of going to Terminal and typing commands. So **TLDR: it resolves the compatibility issue present in apps that are not compiled directly through Xcode.**
 
 ---
 
