@@ -1,14 +1,9 @@
+<img width="100" alt="Icon-MacOS-512x512@1x" src="https://user-images.githubusercontent.com/35755386/167236771-f03b224f-0d6a-4e92-8556-510a62ceb56a.png">
+
 # Rosetta Enforcer
 **Rosetta Enforcer** is a macOS utility designed to help developers convert **Universal Binary** application to **Single Architecture**.
 
 *e.g. Intel-only, forcing **Rosetta** to run on M1 (ARM) Macs*
-
----
-
-## Possible Conversions
-
-1. **Universal Binary** to **Intel-only**
-2. **Universal Binary** to **ARM-only**
 
 ---
 
@@ -17,6 +12,13 @@
 The **download link** will be available soon.
 
 For now, directly run ```Sources/Rosetta Enforcer/Rosetta_EnforcerApp.swift```
+
+---
+
+## Possible Conversions
+
+1. **Universal Binary** to **Intel-only**
+2. **Universal Binary** to **ARM-only**
 
 ---
 
