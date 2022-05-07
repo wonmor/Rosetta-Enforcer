@@ -9,7 +9,7 @@
 
 ## Official Release 1.0
 
-[Download for macOS](https://github.com/wonmor/Rosetta-Enforcer/raw/main/Installers/Install_Rosetta_Enforcer.dmg)
+[Download for **macOS**](https://github.com/wonmor/Rosetta-Enforcer/raw/main/Installers/Install_Rosetta_Enforcer.dmg)
 
 ---
 
