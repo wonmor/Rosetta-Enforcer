@@ -1,7 +1,7 @@
 <img width="100" alt="Icon-MacOS-512x512@1x" src="https://user-images.githubusercontent.com/35755386/167236771-f03b224f-0d6a-4e92-8556-510a62ceb56a.png">
 
 # Rosetta Enforcer
-**Rosetta Enforcer** is a macOS utility designed to help developers convert **Universal Binary** application to **Single Architecture**.
+**Rosetta Enforcer** is a macOS utility that allows developers convert **Universal Binary** application to **Single Architecture**, saving hundreds of megabytes of space as well as resolving a possible compatability issue.
 
 *e.g. **Intel-only**, forcing **Rosetta** to run on **M1 (ARM) Macs***
 
@@ -18,12 +18,12 @@ Developed and Designed by **John Seong**. Served under the **BSD-2-Clause Licens
 ---
 
 ### You might ask...
-What is the **possible use case** for it? Why would anyone prefer **Rosetta** instead of running the app natiely on ARM macs?
+What is the **general use case** for it? Why would anyone prefer **Rosetta** instead of running the app natively on ARM macs?
 
 ---
 
 ### Short Answer
-it resolves the **compatibility issue** present in macOS apps that are **not compiled directly through Xcode**.
+It can save hundreds of megabytes of storage by simply removing unnecessary binaries from the app files. Not only that, it can also resolve the **compatibility issue** present in macOS apps that are **not compiled directly through Xcode**.
 
 ---
 
