@@ -9,9 +9,7 @@
 
 ## Official Release 1.0
 
-The **download link** will be available soon.
-
-For now, directly run ```Sources/Rosetta Enforcer/Rosetta_EnforcerApp.swift```
+[Download for macOS](https://github.com/wonmor/Rosetta-Enforcer/raw/main/Installers/Install_Rosetta_Enforcer.dmg)
 
 ---
 
