@@ -23,7 +23,7 @@ What is the **general use case** for it? Why would anyone prefer **Rosetta** ins
 ---
 
 ### Short Answer
-It can save hundreds of megabytes of storage by simply removing unnecessary binaries from the app files. Not only that, it can also resolve the **compatibility issue** present in macOS apps that are **not compiled directly through Xcode**.
+It can **save** hundreds of megabytes of **storage** by simply **removing unnecessary binaries** from the app files. Not only that, it can also **resolve** the **compatibility issue** present in macOS apps that are **not compiled directly through Xcode**.
 
 ---
 
