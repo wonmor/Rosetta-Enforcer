@@ -9,7 +9,7 @@ Developed and Designed by **John Seong**. Served under the **BSD-2-Clause Licens
 
 [Download for **macOS**](https://github.com/wonmor/Rosetta-Enforcer/raw/main/Installers/Install_Rosetta_Enforcer.dmg)
 
-[Official **Documentation** for both **users** and **developers**](https://github.com/wonmor/Rosetta-Enforcer/wiki/Official-Documentation)
+[Official **Documentation** for Both **Users** and **Developers**](https://github.com/wonmor/Rosetta-Enforcer/wiki/Official-Documentation)
 
 ---
 
