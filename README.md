@@ -10,5 +10,5 @@
  ---
 
  # How to Run
- 1. Just run ```npm install && npm start``` on your preferred Terminal app!
+ 1. Just run ```npm install && npm start``` on your preferred **Terminal** app!
  2. Literally done.
