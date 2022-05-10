@@ -15,7 +15,7 @@ Other **Useful** Links
 
 [Official **Documentation**](https://github.com/wonmor/Rosetta-Enforcer/wiki/Official-Documentation)
 
-[Promotional **Website**](https://website--install-rosetta-enforcer.netlify.app/)
+[Promotional **Website**](https://install-rosetta-enforcer.netlify.app)
 
 ---
 
