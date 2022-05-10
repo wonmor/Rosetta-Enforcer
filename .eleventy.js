@@ -1,6 +1,6 @@
 module.exports = function(eleventyConfig) {
-    eleventyConfig.addPassthroughCopy("{{'./static/images' | url }}");
-    eleventyConfig.addPassthroughCopy("**/**/*.{jpg,png,svg}");
+    eleventyConfig.addPassthroughCopy("./static/images");
+    eleventyConfig.addPassthroughCopy("./**./**/*.{jpg,png,svg}");
 
     return {
         dir: {
