@@ -1,4 +1,6 @@
 module.exports = function(eleventyConfig) {
+    eleventyConfig.addPassthroughCopy("{{'./sources/images' | url }}");
+
     return {
         dir: {
             // default: [site root]
