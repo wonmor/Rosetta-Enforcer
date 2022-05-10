@@ -11,6 +11,8 @@ Developed and Designed by **John Seong**. Served under the **BSD-2-Clause Licens
 
 ---
 
+Other **Useful** Links
+
 [Official **Documentation**](https://github.com/wonmor/Rosetta-Enforcer/wiki/Official-Documentation)
 
 [Promotional **Website**](https://website--install-rosetta-enforcer.netlify.app/)
