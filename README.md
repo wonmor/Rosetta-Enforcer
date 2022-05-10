@@ -1,7 +1,7 @@
 # Install Rosetta Enforcer: Official Website
  Developed by **John Seong**. Made using **Eleventy** static site generator and **Tailwind CSS** framework.
  
- [Visit the **Website**](install-rosetta-enforcer.netlify.app)
+ [Visit the **Website**](https://install-rosetta-enforcer.netlify.app)
 
  ---
 
