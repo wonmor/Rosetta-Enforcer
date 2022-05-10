@@ -1,20 +1,21 @@
 {
     "name": "install_rosetta_enforcer",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
+    "description": "Developed by John Seong. Made using Eleventy static site generator and Tailwind CSS framework.",
+    "main": ".eleventy.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "tailwind:process": "npx postcss src/css/style.css --o dist/output.css --watch",
+        "tailwind:process": "npx postcss static/css/style.css --o static/dist/output.css --watch",
         "start": "concurrently \"npm run tailwind:process\" \"npm run serve\"",
         "serve": "npx eleventy --serve",
-        "build": "env NODE_ENV=production npx eleventy --pathprefix 'eleventy-gh-demo'"
+        "build": "env NODE_ENV=production npx eleventy --config=.eleventy.js'"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "devDependencies": {
         "@11ty/eleventy": "^1.0.1",
+        "@11ty/eleventy-img": "^2.0.0",
         "tailwindcss": "^3.0.24"
     },
     "dependencies": {

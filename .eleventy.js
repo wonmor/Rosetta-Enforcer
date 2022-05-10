@@ -1,5 +1,6 @@
 module.exports = function(eleventyConfig) {
-    eleventyConfig.addPassthroughCopy("{{'./sources/images' | url }}");
+    eleventyConfig.addPassthroughCopy("{{'./static/images' | url }}");
+    eleventyConfig.addPassthroughCopy("**/**/*.{jpg,png,svg}");
 
     return {
         dir: {
@@ -10,3 +11,21 @@ module.exports = function(eleventyConfig) {
         },
     };
 };
+
+async function imageShortcode(src, alt, sizes) {
+    let metadata = await Image(path.join(__dirname, src), {
+        outputDir: "./_site/images/",
+        urlPath: "/_site/images",
+        widths: [300, 600, 900, 1200],
+        formats: ["avif", "webp", "jpg", "png"],
+    });
+
+    let imageAttributes = {
+        alt,
+        sizes,
+        loading: "lazy",
+        decoding: "async",
+    };
+
+    return Image.generateHTML(metadata, imageAttributes);
+}
