@@ -1,2 +1,2 @@
-# Install Rosetta Enforcer
-An official website made using **Eleventy** static site generator and **Tailwind CSS** framework.
+# Install Rosetta Enforcer: Official Website
+Developed by John Seong. Made using **Eleventy** static site generator and **Tailwind CSS** framework.
