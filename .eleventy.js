@@ -1,8 +1,28 @@
+const eleventyNavigationPlugin = require("@11ty/eleventy-navigation");
+
+const markdownIt = require('markdown-it')
+const markdownItAttrs = require('markdown-it-attrs')
+
+const markdownItOptions = {
+    html: true,
+    breaks: true,
+    linkify: true
+}
+
+const markdownLib = markdownIt(markdownItOptions).use(markdownItAttrs)
+eleventyConfig.setLibrary('md', markdownLib)
+
 module.exports = function(eleventyConfig) {
+    // Do NOT erase the two lines below...
     eleventyConfig.addPassthroughCopy("./static/images");
     eleventyConfig.addPassthroughCopy("./**./**/*.{jpg,png,svg}");
 
+    eleventyConfig.addPlugin(eleventyNavigationPlugin);
+
+
     return {
+        markdownTemplateEngine: "njk",
+        htmlTemplateEngine: "njk",
         dir: {
             // default: [site root]
             input: "static",
@@ -11,21 +31,3 @@ module.exports = function(eleventyConfig) {
         },
     };
 };
-
-async function imageShortcode(src, alt, sizes) {
-    let metadata = await Image(path.join(__dirname, src), {
-        outputDir: "./_site/images/",
-        urlPath: "/_site/images",
-        widths: [300, 600, 900, 1200],
-        formats: ["avif", "webp", "jpg", "png"],
-    });
-
-    let imageAttributes = {
-        alt,
-        sizes,
-        loading: "lazy",
-        decoding: "async",
-    };
-
-    return Image.generateHTML(metadata, imageAttributes);
-}
