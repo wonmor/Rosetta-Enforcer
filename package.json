@@ -6,7 +6,7 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "tailwind:process": "npx postcss static/css/style.css --o static/dist/output.css --watch",
-        "start": "concurrently \"npm run tailwind:process\" \"npm run serve\"",
+        "start": "concurrently \"npm install\" \"npm run tailwind:process\" \"npm run serve\"",
         "serve": "npx eleventy --serve",
         "build": "env NODE_ENV=production npx eleventy  --pathprefix 'rosetta-enforcer' --config='.eleventy.js'"
     },
