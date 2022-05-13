@@ -8,16 +8,10 @@ layout: base.njk
 <div class="mx-auto w-full md:w-4/5 container pt-24 md:pt-10 mx-auto flex flex-wrap flex-col md:flex-row items-center">
     <!--Left Col-->
     <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
+    
         {% include "static/_includes/pagination.njk" %}
-        {# Only display the screenshot image while at the documentations page... #}
-        {% if page.url == navPages[1].url %}
-            <h1 class="my-4 pt-8 text-3xl md:text-3xl text-white opacity-100 leading-tight text-center md:text-left">
-                <span class="text-7xl font-bold tracking-tighter">Documentation</span></h1>
-            {{ content | safe }}
-            <br>
-        {% else %}
-            {{ content | safe }}
-        {% endif %}
+        {{ content | safe }}
+
         <form class="bg-gray-900 opacity-100 w-full shadow-lg rounded-lg px-8 pt-6 pb-8 mb-4 ">
             <div class="mb-4 ">
                 <label class="block text-xl text-white py-2 mb-2 " for="emailaddress ">
