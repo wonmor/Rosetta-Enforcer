@@ -516,6 +516,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-bottom: 1rem;
 }
 
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
 .-mb-px {
   margin-bottom: -1px;
 }
@@ -530,6 +534,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .mb-2 {
   margin-bottom: 0.5rem;
+}
+
+.mb-20 {
+  margin-bottom: 5rem;
 }
 
 .block {
@@ -653,8 +661,8 @@ Ensure the default browser behavior of the `hidden` attribute.
   background-attachment: fixed;
 }
 
-.p-12 {
-  padding: 3rem;
+.p-10 {
+  padding: 2.5rem;
 }
 
 .py-2 {
@@ -672,10 +680,6 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-right: 2rem;
 }
 
-.pt-24 {
-  padding-top: 6rem;
-}
-
 .pt-8 {
   padding-top: 2rem;
 }
@@ -688,6 +692,10 @@ Ensure the default browser behavior of the `hidden` attribute.
   padding-bottom: 2rem;
 }
 
+.pt-10 {
+  padding-top: 2.5rem;
+}
+
 .pt-16 {
   padding-top: 4rem;
 }
@@ -698,6 +706,10 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .text-3xl {
@@ -830,7 +842,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .subtitle-white {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  text-align: center;
   font-size: 1.875rem;
   line-height: 2.25rem;
   --tw-text-opacity: 1;
@@ -841,7 +852,7 @@ Ensure the default browser behavior of the `hidden` attribute.
 .bigger-subtitle-white {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  text-align: center;
+  text-align: left;
   font-size: 2.25rem;
   line-height: 2.5rem;
   --tw-text-opacity: 1;
@@ -852,7 +863,6 @@ Ensure the default browser behavior of the `hidden` attribute.
 .subtitle2-white {
   margin-top: 1rem;
   margin-bottom: 1rem;
-  text-align: center;
   font-size: 1.875rem;
   line-height: 2.25rem;
   --tw-text-opacity: 1;
@@ -884,22 +894,10 @@ Ensure the default browser behavior of the `hidden` attribute.
     line-height: 1;
   }
 
-  .subtitle-white {
-    text-align: left;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-
   .bigger-subtitle-white {
     text-align: left;
     font-size: 3rem;
     line-height: 1;
-  }
-
-  .subtitle2-white {
-    text-align: left;
-    font-size: 1.875rem;
-    line-height: 2.25rem;
   }
 }
 
@@ -937,6 +935,12 @@ Ensure the default browser behavior of the `hidden` attribute.
           text-decoration-line: none;
 }
 
+@media (min-width: 640px) {
+  .sm\:mt-0 {
+    margin-top: 0px;
+  }
+}
+
 @media (min-width: 768px) {
   .md\:w-4\/5 {
     width: 80%;
@@ -946,8 +950,12 @@ Ensure the default browser behavior of the `hidden` attribute.
     flex-direction: row;
   }
 
-  .md\:pt-10 {
-    padding-top: 2.5rem;
+  .md\:p-0 {
+    padding: 0px;
+  }
+
+  .md\:pl-12 {
+    padding-left: 3rem;
   }
 
   .md\:text-left {
