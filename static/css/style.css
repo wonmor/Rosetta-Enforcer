@@ -7,15 +7,15 @@
 }
 
 .subtitle-white {
-    @apply my-4 text-3xl text-white opacity-100 text-center;
+    @apply my-4 text-3xl text-white opacity-100;
 }
 
 .bigger-subtitle-white {
-    @apply my-4 text-4xl text-white opacity-100 text-center;
+    @apply my-4 text-4xl text-white opacity-100 text-left;
 }
 
 .subtitle2-white {
-    @apply my-4 text-3xl text-white opacity-100 text-center;
+    @apply my-4 text-3xl text-white opacity-100;
 }
 
 .make-it-pretty-blue {
@@ -30,13 +30,7 @@
     .maintitle-white {
         @apply text-7xl text-left;
     }
-    .subtitle-white {
-        @apply text-3xl text-left;
-    }
     .bigger-subtitle-white {
         @apply text-5xl text-left;
-    }
-    .subtitle2-white {
-        @apply text-3xl text-left;
     }
 }
