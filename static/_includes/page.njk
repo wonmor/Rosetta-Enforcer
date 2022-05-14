@@ -5,12 +5,7 @@ layout: base.njk
 {% set navPages = collections.menu | eleventyNavigation %}
 
 <!--Main-->
-{# Responsive menu bar sizing #}
-{% if page.url == navPages[0].url %}
-<div class="mx-auto w-full md:w-4/5 container pt-30 mt-10 sm:mt-0 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-{% else %}
 <div class="mx-auto w-full md:w-4/5 container pt-10 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-{% endif %}
     <!--Left Col-->
     {# Only limit the display width while at home... #}
     {% if page.url == navPages[0].url %}
@@ -48,8 +43,7 @@ layout: base.njk
                 <h1 class="maintitle-white flex justify-center">
                     <span class="text-right font-thin">We call this an innovation.</span></h1>
                 <iframe class="mb-20 w-full" style="border: 3px dotted #EEE" height="315" src="https://www.youtube.com/embed/C9aNytW7Vtc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                {# Responsive image resizing implemented #}
-                <img class="mx-auto w-full md:w-4/5 p-10 md:p-0 transform -rotate-6 transition hover:scale-200 duration-700 ease-in-out hover:rotate-6 " src="/images/Screenshot.png"/>
+                <img class="mx-auto w-full p-10 md:p-5 md:w-4/5 transform -rotate-6 transition hover:scale-200 duration-700 ease-in-out hover:rotate-6 " src="/images/Screenshot.png"/>
             </div>
         {% endif %}
     </div>
