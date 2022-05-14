@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .maintitle-white {
-    @apply my-4 pt-8 text-5xl text-white opacity-100 tracking-tighter font-bold text-center;
+    @apply my-4 pt-8 text-5xl text-white opacity-100 tracking-tighter font-bold text-left;
 }
 
 .subtitle-white {
@@ -28,9 +28,9 @@
 
 @screen md {
     .maintitle-white {
-        @apply text-7xl text-left;
+        @apply text-7xl;
     }
     .bigger-subtitle-white {
-        @apply text-5xl text-left;
+        @apply text-5xl;
     }
 }
