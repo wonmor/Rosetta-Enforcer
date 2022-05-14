@@ -829,7 +829,7 @@ Ensure the default browser behavior of the `hidden` attribute.
   margin-top: 1rem;
   margin-bottom: 1rem;
   padding-top: 2rem;
-  text-align: center;
+  text-align: left;
   font-size: 3rem;
   line-height: 1;
   font-weight: 700;
@@ -889,13 +889,11 @@ Ensure the default browser behavior of the `hidden` attribute.
 
 @media (min-width: 768px) {
   .maintitle-white {
-    text-align: left;
     font-size: 4.5rem;
     line-height: 1;
   }
 
   .bigger-subtitle-white {
-    text-align: left;
     font-size: 3rem;
     line-height: 1;
   }
