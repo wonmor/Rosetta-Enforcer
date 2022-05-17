@@ -475,7 +475,7 @@ struct ContentView: View {
         )
     }
     
-    func removeAllFileSelections() {
+    private func removeAllFileSelections() {
         self.filePath.removeAll()
         self.fileName.removeAll()
         self.fileArchitecture.removeAll()
