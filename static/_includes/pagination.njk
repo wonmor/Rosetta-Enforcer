@@ -1,0 +1,13 @@
+{% set navPages = collections.menu | eleventyNavigation %}
+
+<ul class="flex border-b">
+    {% for entry in navPages %}
+    <li class="-mb-px mr-1">
+        {% if page.url == entry.url %}
+        <a class="bg-transparent inline-block border-l border-t border-r rounded-t py-2 px-4 text-white hover:text-blue-300 font-thin" href={{ entry.url }}>{{ entry.title }}</a>
+        {% else %}
+        <a class="bg-transparent inline-block py-2 px-4 text-white hover:text-blue-300 font-thin" href={{ entry.url }}>{{ entry.title }}</a>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
